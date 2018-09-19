@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using GildedRose.Console;
+using GildedRose.Console.Items;
 using Xunit;
 
 namespace GildedRose.Tests
@@ -58,7 +60,7 @@ namespace GildedRose.Tests
         [Fact]
         public void TestAgedBrieIncreasesAsItGetsOlder()
         {
-            Item item = CreateTestItem(Program.AgedBrieName);
+            Item item = CreateTestItem(() => new BrieItem());
             List<Item> items = new List<Item> { item };
 
             Program.UpdateQuality(items);
@@ -70,7 +72,7 @@ namespace GildedRose.Tests
         [Fact]
         public void TestQualityIsNeverMoreThan50()
         {
-            Item item = CreateTestItem(Program.AgedBrieName);
+            Item item = CreateTestItem(() => new BrieItem());
             item.Quality = 49;
             List<Item> items = new List<Item> { item };
 
@@ -83,7 +85,7 @@ namespace GildedRose.Tests
         [Fact]
         public void TestSulfurasHeverHasToBeSold()
         {
-            Item item = CreateTestItem(Program.SulfurasName);
+            Item item = CreateTestItem(() => new SulfurasItem());
             List<Item> items = new List<Item> { item };
 
             Program.UpdateQuality(items);
@@ -95,7 +97,7 @@ namespace GildedRose.Tests
         [Fact]
         public void TestSulfurasNeverDecreasesInQuality()
         {
-            Item item = CreateTestItem(Program.SulfurasName);
+            Item item = CreateTestItem(() => new SulfurasItem());
             List<Item> items = new List<Item> { item };
 
             Program.UpdateQuality(items);
@@ -107,7 +109,7 @@ namespace GildedRose.Tests
         [Fact]
         public void TestSulfurasQualityNeverChanges()
         {
-            Item item = CreateTestItem(Program.SulfurasName);
+            Item item = CreateTestItem(() => new SulfurasItem());
             int initialQuality = item.Quality;
             List<Item> items = new List<Item> { item };
 
@@ -120,7 +122,7 @@ namespace GildedRose.Tests
         [Fact]
         public void TestBackStagePassesQualityIncreasesBy2WhenThereAre10DaysOrLess()
         {
-            Item item = CreateTestItem(Program.BackStagePassName);
+            Item item = CreateTestItem(() => new BackstagePassItem());
             item.SellIn = 11;
             List<Item> items = new List<Item> { item };
 
@@ -135,7 +137,7 @@ namespace GildedRose.Tests
         [Fact]
         public void TestBackStagePassesQualityIncreasesBy3WhenThereAre5DaysOrLess()
         {
-            Item item = CreateTestItem(Program.BackStagePassName);
+            Item item = CreateTestItem(() => new BackstagePassItem());
             item.SellIn = 6;
             List<Item> items = new List<Item> { item };
 
@@ -150,7 +152,7 @@ namespace GildedRose.Tests
         [Fact]
         public void TestBackStagePassesQualityIs0AfterTheConcert()
         {
-            Item item = CreateTestItem(Program.BackStagePassName);
+            Item item = CreateTestItem(() => new BackstagePassItem());
             item.SellIn = 1;
             List<Item> items = new List<Item> { item };
 
@@ -163,7 +165,7 @@ namespace GildedRose.Tests
         [Fact]
         public void TestConjuredItemDegradesInQualityTwiceAsFastAsNormalItem()
         {
-            Item item = CreateTestItem(Program.ConjuredName);
+            Item item = CreateTestItem(() => new ConjuredItem());
             List<Item> items = new List<Item> { item };
 
             Program.UpdateQuality(items);
@@ -172,14 +174,12 @@ namespace GildedRose.Tests
             Assert.Equal(InitialTestQuantity - 4, item.Quality);
         }
 
-        private Item CreateTestItem(string name = null)
+        private Item CreateTestItem(Func<Item> createItem = null)
         {
-            return new Item
-            {
-                Name = name ?? "TestItem",
-                Quality = InitialTestQuantity,
-                SellIn = InitialTestSellIn
-            };
+            Item item = createItem != null ? createItem() : new Item { Name = "TestItem" };
+            item.Quality = InitialTestQuantity;
+            item.SellIn = InitialTestSellIn;
+            return item;
         }
     }
 }
