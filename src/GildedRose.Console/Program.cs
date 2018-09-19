@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GildedRose.Console.Items;
 
 namespace GildedRose.Console
@@ -9,38 +10,47 @@ namespace GildedRose.Console
 
         IList<Item> Items;
 
+        private Program()
+        {
+            // Empty constructor to force factory pattern using method CreateProgram
+        }
+
         static void Main()
         {
             System.Console.WriteLine("OMGHAI!");
 
-            var app = new Program
-                          {
-                              Items = new List<Item>
-                                          {
-                                              new Item {Name = "+5 Dexterity Vest", SellIn = 10, Quality = 20},
-                                              new Item {Name = "Aged Brie", SellIn = 2, Quality = 0},
-                                              new Item {Name = "Elixir of the Mongoose", SellIn = 5, Quality = 7},
-                                              new Item {Name = "Sulfuras, Hand of Ragnaros", SellIn = 0, Quality = 80},
-                                              new Item
-                                                  {
-                                                      Name = "Backstage passes to a TAFKAL80ETC concert",
-                                                      SellIn = 15,
-                                                      Quality = 20
-                                                  },
-                                              new Item {Name = "Conjured Mana Cake", SellIn = 3, Quality = 6}
-                                          }
+            var app = CreateProgram();
 
-                          };
-
-            UpdateQuality(app.Items);
+            app.UpdateQuality();
 
             System.Console.ReadKey();
 
         }
 
-        public static void UpdateQuality(IEnumerable<Item> items)
+        public static Program CreateProgram(IEnumerable<Item> items = null)
         {
-            foreach (Item item in items)
+            return new Program
+            {
+                Items = items?.ToList() ?? new List<Item>
+                {
+                    new Item {Name = "+5 Dexterity Vest", SellIn = 10, Quality = 20},
+                    new BrieItem {Name = "Aged Brie", SellIn = 2, Quality = 0},
+                    new Item {Name = "Elixir of the Mongoose", SellIn = 5, Quality = 7},
+                    new SulfurasItem {Name = "Sulfuras, Hand of Ragnaros" },
+                    new BackstagePassItem
+                    {
+                        Name = "Backstage passes to a TAFKAL80ETC concert",
+                        SellIn = 15,
+                        Quality = 20
+                    },
+                    new ConjuredItem {Name = "Conjured Mana Cake", SellIn = 3, Quality = 6}
+                }
+            };
+        }
+
+        public void UpdateQuality()
+        {
+            foreach (Item item in Items)
             {
                 if (item is IComplexItem)
                 {

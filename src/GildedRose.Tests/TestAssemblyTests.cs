@@ -15,12 +15,12 @@ namespace GildedRose.Tests
         public void TestUpdateQualityLowersSellInAndQuality()
         {
             Item item = CreateTestItem();
-            List<Item> items = new List<Item> { item };
+            var program = Program.CreateProgram(new List<Item> { item });
 
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(InitialTestSellIn - 1, item.SellIn);
             Assert.Equal(InitialTestQuantity - 1, item.Quality);
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(InitialTestSellIn - 2, item.SellIn);
             Assert.Equal(InitialTestQuantity - 2, item.Quality);
         }
@@ -30,15 +30,15 @@ namespace GildedRose.Tests
         {
             Item item = CreateTestItem();
             item.SellIn = 1;
-            List<Item> items = new List<Item> { item };
+            var program = Program.CreateProgram(new List<Item> { item });
 
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(0, item.SellIn);
             Assert.Equal(InitialTestQuantity - 1, item.Quality);
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(-1, item.SellIn);
             Assert.Equal(InitialTestQuantity - 3, item.Quality);
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(-2, item.SellIn);
             Assert.Equal(InitialTestQuantity - 5, item.Quality);
         }
@@ -49,11 +49,11 @@ namespace GildedRose.Tests
             Item item = CreateTestItem();
             item.SellIn = 0;
             item.Quality = 1;
-            List<Item> items = new List<Item> { item };
+            var program = Program.CreateProgram(new List<Item> { item });
 
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(0, item.Quality);
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(0, item.Quality);
         }
 
@@ -61,11 +61,11 @@ namespace GildedRose.Tests
         public void TestAgedBrieIncreasesAsItGetsOlder()
         {
             Item item = CreateTestItem(() => new BrieItem());
-            List<Item> items = new List<Item> { item };
+            var program = Program.CreateProgram(new List<Item> { item });
 
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(InitialTestQuantity + 1, item.Quality);
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(InitialTestQuantity + 2, item.Quality);
         }
 
@@ -74,11 +74,11 @@ namespace GildedRose.Tests
         {
             Item item = CreateTestItem(() => new BrieItem());
             item.Quality = 49;
-            List<Item> items = new List<Item> { item };
+            var program = Program.CreateProgram(new List<Item> { item });
 
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(50, item.Quality);
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(50, item.Quality);
         }
 
@@ -86,11 +86,11 @@ namespace GildedRose.Tests
         public void TestSulfurasHeverHasToBeSold()
         {
             Item item = CreateTestItem(() => new SulfurasItem());
-            List<Item> items = new List<Item> { item };
+            var program = Program.CreateProgram(new List<Item> { item });
 
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(InitialTestSellIn, item.SellIn);
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(InitialTestSellIn, item.SellIn);
         }
 
@@ -98,11 +98,11 @@ namespace GildedRose.Tests
         public void TestSulfurasNeverDecreasesInQuality()
         {
             Item item = CreateTestItem(() => new SulfurasItem());
-            List<Item> items = new List<Item> { item };
+            var program = Program.CreateProgram(new List<Item> { item });
 
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(InitialTestQuantity, item.Quality);
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(InitialTestQuantity, item.Quality);
         }
 
@@ -111,11 +111,11 @@ namespace GildedRose.Tests
         {
             Item item = CreateTestItem(() => new SulfurasItem());
             int initialQuality = item.Quality;
-            List<Item> items = new List<Item> { item };
+            var program = Program.CreateProgram(new List<Item> { item });
 
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(initialQuality, item.Quality);
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(initialQuality, item.Quality);
         }
 
@@ -124,12 +124,12 @@ namespace GildedRose.Tests
         {
             Item item = CreateTestItem(() => new BackstagePassItem());
             item.SellIn = 11;
-            List<Item> items = new List<Item> { item };
+            var program = Program.CreateProgram(new List<Item> { item });
 
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(10, item.SellIn);
             Assert.Equal(InitialTestQuantity + 1, item.Quality);
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(9, item.SellIn);
             Assert.Equal(InitialTestQuantity + 3, item.Quality);
         }
@@ -139,12 +139,12 @@ namespace GildedRose.Tests
         {
             Item item = CreateTestItem(() => new BackstagePassItem());
             item.SellIn = 6;
-            List<Item> items = new List<Item> { item };
+            var program = Program.CreateProgram(new List<Item> { item });
 
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(5, item.SellIn);
             Assert.Equal(InitialTestQuantity + 2, item.Quality);
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(4, item.SellIn);
             Assert.Equal(InitialTestQuantity + 5, item.Quality);
         }
@@ -154,11 +154,11 @@ namespace GildedRose.Tests
         {
             Item item = CreateTestItem(() => new BackstagePassItem());
             item.SellIn = 1;
-            List<Item> items = new List<Item> { item };
+            var program = Program.CreateProgram(new List<Item> { item });
 
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(InitialTestQuantity + 3, item.Quality);
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(0, item.Quality);
         }
 
@@ -166,11 +166,11 @@ namespace GildedRose.Tests
         public void TestConjuredItemDegradesInQualityTwiceAsFastAsNormalItem()
         {
             Item item = CreateTestItem(() => new ConjuredItem());
-            List<Item> items = new List<Item> { item };
+            var program = Program.CreateProgram(new List<Item> { item });
 
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(InitialTestQuantity - 2, item.Quality);
-            Program.UpdateQuality(items);
+            program.UpdateQuality();
             Assert.Equal(InitialTestQuantity - 4, item.Quality);
         }
 
