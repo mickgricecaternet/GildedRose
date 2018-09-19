@@ -8,6 +8,7 @@ namespace GildedRose.Console
         public const string AgedBrieName = "Aged Brie";
         public const string SulfurasName = "Sulfuras, Hand of Ragnaros";
         public const string ConjuredName = "Conjured Mana Cake";
+        internal const int MaxQuality = 50;
 
         IList<Item> Items;
 
@@ -60,7 +61,7 @@ namespace GildedRose.Console
                 }
                 else
                 {
-                    if (item.Quality < 50)
+                    if (item.Quality < MaxQuality)
                     {
                         item.Quality = item.Quality + 1;
 
@@ -68,7 +69,7 @@ namespace GildedRose.Console
                         {
                             if (item.SellIn < 11)
                             {
-                                if (item.Quality < 50)
+                                if (item.Quality < MaxQuality)
                                 {
                                     item.Quality = item.Quality + 1;
                                 }
@@ -76,7 +77,7 @@ namespace GildedRose.Console
 
                             if (item.SellIn < 6)
                             {
-                                if (item.Quality < 50)
+                                if (item.Quality < MaxQuality)
                                 {
                                     item.Quality = item.Quality + 1;
                                 }
@@ -111,7 +112,7 @@ namespace GildedRose.Console
                     }
                     else
                     {
-                        if (item.Quality < 50)
+                        if (item.Quality < MaxQuality)
                         {
                             item.Quality = item.Quality + 1;
                         }
